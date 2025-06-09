@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from socket_scanner import scan_with_nmap
+from socket_scanner import scan_ports
 
 app = Flask(__name__)
 

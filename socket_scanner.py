@@ -1,14 +1,28 @@
+# socket_scanner.py
+
 import socket
 
-def basic_scan(host):
+COMMON_PORTS = {
+    21: "FTP",
+    22: "SSH",
+    23: "Telnet",
+    25: "SMTP",
+    53: "DNS",
+    80: "HTTP",
+    110: "POP3",
+    143: "IMAP",
+    443: "HTTPS",
+    445: "SMB",
+    3389: "RDP"
+}
+
+def scan_ports(target):
     open_ports = []
-    for port in range(20, 1025):
+    for port, service in COMMON_PORTS.items():
         try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.settimeout(0.5)
-                result = s.connect_ex((host, port))
-                if result == 0:
-                    open_ports.append(port)
-        except Exception:
-            continue
+            sock = socket.create_connection((target, port), timeout=1)
+            sock.close()
+            open_ports.append(f"TCP {port} - open ({service})")
+        except:
+            pass
     return open_ports
